@@ -89,11 +89,17 @@ func Consumer(queue chan Message_Block, lock chan int) {
 		//其中一个夺到了，
 
 		switch c_item.cmd {
-		case CMD_CGI_RETCODE:
-			Write_File(RETCODELOGNAME, c_item.buff)
+		case CMD_BIDE2_CGI_RETCODE:
+			Write_File(BIDE2_RETCODELOGNAME, c_item.buff)
 			break
-		case CMD_LOG_IMPORTANT:
-			Write_File(IMPORTANTLOGNAME, c_item.buff)
+		case CMD_BIDE2_IMPORTANT:
+			Write_File(BIDE2_IMPORTANTLOGNAME, c_item.buff)
+			break
+		case CMD_DCR_CGI_RETCODE:
+			Write_File(DCR_RETCODELOGNAME, c_item.buff)
+			break
+		case CMD_DCR_IMPORTANT:
+			Write_File(DCR_IMPORTANTLOGNAME, c_item.buff)
 			break
 		default:
 			break
