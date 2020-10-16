@@ -88,21 +88,8 @@ func Consumer(queue chan Message_Block, lock chan int) {
 		lk := <-lock
 		//其中一个夺到了，
 
-		switch c_item.cmd {
-		case CMD_BIDE2_CGI_RETCODE:
-			Write_File(BIDE2_RETCODELOGNAME, c_item.buff)
-			break
-		case CMD_BIDE2_IMPORTANT:
-			Write_File(BIDE2_IMPORTANTLOGNAME, c_item.buff)
-			break
-		case CMD_DCR_CGI_RETCODE:
-			Write_File(DCR_RETCODELOGNAME, c_item.buff)
-			break
-		case CMD_DCR_IMPORTANT:
-			Write_File(DCR_IMPORTANTLOGNAME, c_item.buff)
-			break
-		default:
-			break
+		if c_item.cmd < CMD_END {
+			Write_File(CMD2File[c_item.cmd], c_item.buff)
 		}
 
 		lock <- lk
@@ -134,6 +121,8 @@ func Write_File(pre_filename string, buff []byte) {
 }
 
 func main() {
+
+	Init()
 
 	addrinfo := fmt.Sprintf(":%d", PORT)
 	udp_addr, err := net.ResolveUDPAddr("udp4", addrinfo)
